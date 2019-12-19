@@ -7,22 +7,28 @@ var request = require('request');
 router.get('/:id', function (req, res, next) {
   var sentVars = {
   }
-  var questions_URL = "https://api.stackexchange.com/2.2/questions/" + req.params.id + "?order=desc&sort=activity&site=stackoverflow&filter=!9Z(-wwYGT";  
   // get selected question's data
+  var questions_URL = "https://api.stackexchange.com/2.2/questions/" + req.params.id + "?order=desc&sort=activity&site=stackoverflow&filter=!9Z(-wwYGT";
   httpGetRequest(questions_URL, (questions) => {
     question = questions.items[0];
     sentVars.title = question.title;
     question.creation_date_formatted = convertDate(question.creation_date)
     sentVars.question = questions.items[0];
+    // get question's answers
     var answers_URL = "https://api.stackexchange.com/2.2/questions/" + req.params.id + "/answers?pagesize=10&order=desc&sort=activity&site=stackoverflow&filter=!-*jbN0RQENuP";
-    // get selected question's answers
     httpGetRequest(answers_URL, (answers) => {
+      // convert date type
       answers.items.forEach(element => {
         element.creation_date_formatted = convertDate(element.creation_date)
       });
       sentVars.answers = answers.items;
-      // console.log(sentVars)
-      res.render('question', sentVars);
+      // get question comments
+      var questionComments_URL = "https://api.stackexchange.com/2.2/questions/" + req.params.id + "/comments?order=asc&sort=creation&site=stackoverflow&filter=!9Z(-x.Ecg";
+      httpGetRequest(questionComments_URL, (questionComments) => {
+        sentVars.questionComments = questionComments.items;
+        // console.log(sentVars)
+        res.render('question', sentVars);
+      })
     })
   })
 });

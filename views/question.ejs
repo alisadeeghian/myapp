@@ -82,15 +82,10 @@
     <main class="mdl-layout__content">
       <div class="mdl-layout__tab-panel is-active">
         <section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp">
-
-
           <div class="mdl-card mdl-cell mdl-cell--12-col">
-
             <div class="mdl-card__supporting-text">
-
               <div class="question">
                 <h4><%= title %></h4>
-
                 <div class="row">
                   <div class="col-md-4">
                     <p><%= question.score %> votes</p>
@@ -104,32 +99,37 @@
                 </div>
                 <hr>
                 <%- question.body %>
-                <!-- <p>is answered = <%= question.is_answered %></p> -->
-
                 <hr>
-
+                <% if (questionComments.length > 0) { %>
+                  <h3>Comments :</h3>
+                <% for(var i=0; i < questionComments.length; i++) { %>
+                <div class="comment-text js-comment-text-and-form">
+                  <div class="comment-body js-comment-edit-hide">
+                    <span class="comment-copy"><%- questionComments[i].body %></span>
+                    –&nbsp;<a href=<%= questionComments[i].owner.link %> class="comment-user">
+                      <%= questionComments[i].owner.display_name %>
+                    </a>
+                  </div>
+                </div>
+                <hr>
+                <% } %>
+                <% } %>
                 <dic class="row">
                   <dic class="col-md-2">
                     <p><a href=<%= question.link %>>Question link</a></p>
-
                   </dic>
                   <dic class="col-md-2">
                     <p><a href=<%= question.owner.link %>>Owner link</a></p>
-
                   </dic>
                 </dic>
               </div>
-
-
             </div>
           </div>
         </section>
         <section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp">
-          <div class="mdl-card mdl-cell mdl-cell--12-col">
             <div class="mdl-card__supporting-text" style="text-align: center;">
-              <h3><%= question.answer_count %> Answers</h3>
+              <h2><%= question.answer_count %> Answers</h2>
             </div>
-          </div>
         </section>
         <% for(var i=0; i < answers.length; i++) { %>
         <section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp">
